@@ -1,0 +1,76 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+<!-- 配置常量，修改文件不需要启动服务 -->
+<constant name="struts.devMode" value="true"></constant>
+<!-- 允许动态方法调用 -->
+<constant name="struts.enable.DynamicMethodInvocation" value="true"></constant>
+
+	<!-- 从index.jsp直接跳转到主页面 -->
+	<package name="house" namespace="/" extends="struts-default">
+		<action name="HouseAction" class="com.house.action.HouseAction">
+			<result name="index">/WEB-INF/index.jsp</result>
+		</action>
+	</package>
+	
+	<!-- 查询街道，异步 -->
+	<package name="jd" namespace="/" extends="json-default">
+		<action name="jdAction" class="com.house.action.JdAction">
+			<result name="jd_list" type="json"></result>
+		</action>
+	</package>
+	<!-- 高级 -->
+	<package name="search" namespace="/" extends="struts-default">
+		<action name="searchAction" class="com.house.action.SearchAction">
+			<result name="search_list">/WEB-INF/list.jsp</result>
+		</action>
+	</package>
+	<!-- 查询详情 -->
+	<package name="detail" namespace="/" extends="struts-default">
+		<action name="detailAction" class="com.house.action.DetailAction">
+			<result name="detail_list">/WEB-INF/detail.jsp</result>
+		</action>
+	</package>
+	
+	<!-- 用户操作 -->
+	<package name="user" namespace="/" extends="struts-default">
+		<action name="userAction" class="com.house.action.UserAction">
+		<!-- 登录成功 -->
+		<result name="login_success" type="redirectAction">userAction!fenye</result>
+		<!-- 登录失败 -->
+		<result name="login_fail">/index.jsp</result>
+		<!-- 登陆成功后运行房屋信息分页操作 -->
+		<result name="login_fenye">/WEB-INF/login.jsp</result>
+		
+		<!-- 注册前判断用户是否存在 -->
+		<result name="is_reg">/reg.jsp</result>
+		<!-- 如果说注册的用户不存在，就去注册 -->
+		<result name="go_reg" type="redirectAction">userAction!reg</result>
+		<!-- 注册成功 -->
+		<result name="reg_success">/login_form.jsp</result>
+		<!-- 注册失败 -->
+		<result name="reg_fail">/reg.jsp</result>
+		<!-- 注销 -->
+		<result name="log_out">/index.jsp</result>
+		
+		<!-- 判断用户是否已经登录 -->
+		<result name="is_login" type="redirectAction">postAction!postFrom</result>
+		<result name="no_login">/login_from.jsp</result>
+		</action>
+	</package>
+	
+	<!-- 发布信息 -->
+	<package name="post" namespace="/" extends="struts-default">
+		<action name="postAction" class="com.house.action.PostAction">
+		<!-- 进入到发布页面 -->
+			<result name="post_form">/WEB-INF/post.jsp</result>
+		<!-- 发布成功 -->	
+			<result name="post_success">/index.jsp</result>
+		<!-- 进入到已经发布的房屋信息总页面 -->
+			<result name="post_fwxx">/WEB-INF/mypost.jsp</result>
+		<!-- 删除成功 -->
+			<result name="delete_success" type="redirectAction">postAction!postFwxx</result>
+		</action>
+	</package>
+</struts>
